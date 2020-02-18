@@ -1,5 +1,10 @@
 <template>
-  <VirtualList :listData="data" :estimatedItemSize="100" v-slot="slotProps">
+  <VirtualList
+    v-if="enable"
+    :listData="data"
+    :estimatedItemSize="100"
+    v-slot="slotProps"
+  >
     <Item :item="slotProps.item" />
   </VirtualList>
 </template>
@@ -11,7 +16,7 @@ import Item from './components/Item.vue'
 import faker from 'faker'
 
 const data = []
-const COUNT = 10000
+const COUNT = 1000
 
 for (let id = 0; id < COUNT; id++) {
   data.push({
@@ -24,12 +29,34 @@ export default {
   name: 'app',
   data() {
     return {
-      data
+      data,
+      enable: true
     }
   },
   components: {
     VirtualList,
     Item
+  },
+  mounted() {
+    // let index = COUNT
+    // const timer = setInterval(() => {
+    //   index += 10
+    //   const temp = [...this.data]
+    //   for (let id = index - 10; id < index; id++) {
+    //     temp.push({
+    //       id,
+    //       value: faker.lorem.sentences()
+    //     })
+    //   }
+    //   this.enable = false
+    //   this.data = [...temp]
+    //   this.$nextTick(() => {
+    //     this.enable = true
+    //   })
+    // }, 5000)
+    // this.$once('hook:beforeDestory', () => {
+    //   clearInterval(timer)
+    // })
   }
 }
 </script>

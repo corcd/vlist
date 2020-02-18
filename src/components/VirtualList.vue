@@ -45,6 +45,48 @@ export default {
       default: '100%'
     }
   },
+  data() {
+    return {
+      // 可视区域高度
+      screenHeight: 0,
+      // 起始索引
+      start: 0,
+      // 结束索引
+      end: 0
+    }
+  },
+  created() {
+    this.initPositions()
+    window.vm = this
+  },
+  mounted() {
+    this.screenHeight = this.$el.clientHeight
+    this.start = 0
+    this.end = this.start + this.visibleCount
+  },
+  updated() {
+    console.log('updated')
+    this.$nextTick(function() {
+      if (!this.$refs.items || !this.$refs.items.length) {
+        return
+      }
+      // 获取真实元素大小，修改对应的尺寸缓存
+      this.updateItemsSize()
+      // 更新列表总高度
+      const height = this.positions[this.positions.length - 1].bottom
+      this.$refs.phantom.style.height = height + 'px'
+      // 更新真实偏移量
+      this.setStartOffset()
+    })
+  },
+  watch: {
+    listData: {
+      handler(nv, ov) {
+        // todo
+      },
+      immediate: false
+    }
+  },
   computed: {
     _listData() {
       return this.listData.map((item, index) => {
@@ -69,40 +111,8 @@ export default {
     visibleData() {
       const start = this.start - this.aboveCount
       const end = this.end + this.belowCount
+      console.log(start, end)
       return this._listData.slice(start, end)
-    }
-  },
-  created() {
-    this.initPositions()
-    window.vm = this
-  },
-  mounted() {
-    this.screenHeight = this.$el.clientHeight
-    this.start = 0
-    this.end = this.start + this.visibleCount
-  },
-  updated() {
-    this.$nextTick(function() {
-      if (!this.$refs.items || !this.$refs.items.length) {
-        return
-      }
-      // 获取真实元素大小，修改对应的尺寸缓存
-      this.updateItemsSize()
-      // 更新列表总高度
-      const height = this.positions[this.positions.length - 1].bottom
-      this.$refs.phantom.style.height = height + 'px'
-      // 更新真实偏移量
-      this.setStartOffset()
-    })
-  },
-  data() {
-    return {
-      // 可视区域高度
-      screenHeight: 0,
-      // 起始索引
-      start: 0,
-      // 结束索引
-      end: 0
     }
   },
   methods: {
