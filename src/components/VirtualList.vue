@@ -24,22 +24,22 @@
 export default {
   name: 'VirtualList',
   props: {
-    //所有列表数据
+    // 所有列表数据
     listData: {
       type: Array,
       default: () => []
     },
-    //预估高度
+    // 预估高度
     estimatedItemSize: {
       type: Number,
       required: true
     },
-    //缓冲区比例
+    // 缓冲区比例
     bufferScale: {
       type: Number,
       default: 1
     },
-    //容器高度 100px or 50vh
+    // 容器高度 100px or 50vh
     height: {
       type: String,
       default: '100%'
@@ -67,8 +67,8 @@ export default {
       )
     },
     visibleData() {
-      let start = this.start - this.aboveCount
-      let end = this.end + this.belowCount
+      const start = this.start - this.aboveCount
+      const end = this.end + this.belowCount
       return this._listData.slice(start, end)
     }
   },
@@ -86,22 +86,22 @@ export default {
       if (!this.$refs.items || !this.$refs.items.length) {
         return
       }
-      //获取真实元素大小，修改对应的尺寸缓存
+      // 获取真实元素大小，修改对应的尺寸缓存
       this.updateItemsSize()
-      //更新列表总高度
-      let height = this.positions[this.positions.length - 1].bottom
+      // 更新列表总高度
+      const height = this.positions[this.positions.length - 1].bottom
       this.$refs.phantom.style.height = height + 'px'
-      //更新真实偏移量
+      // 更新真实偏移量
       this.setStartOffset()
     })
   },
   data() {
     return {
-      //可视区域高度
+      // 可视区域高度
       screenHeight: 0,
-      //起始索引
+      // 起始索引
       start: 0,
-      //结束索引
+      // 结束索引
       end: 0
     }
   },
@@ -114,9 +114,9 @@ export default {
         bottom: (index + 1) * this.estimatedItemSize
       }))
     },
-    //获取列表起始索引
+    // 获取列表起始索引
     getStartIndex(scrollTop = 0) {
-      //二分法查找
+      // 二分法查找
       return this.binarySearch(this.positions, scrollTop)
     },
     binarySearch(list, value) {
@@ -125,8 +125,8 @@ export default {
       let tempIndex = null
 
       while (start <= end) {
-        let midIndex = parseInt((start + end) / 2)
-        let midValue = list[midIndex].bottom
+        const midIndex = parseInt((start + end) / 2, 10)
+        const midValue = list[midIndex].bottom
         if (midValue === value) {
           return midIndex + 1
         } else if (midValue < value) {
@@ -140,16 +140,16 @@ export default {
       }
       return tempIndex
     },
-    //获取列表项的当前尺寸
+    // 获取列表项的当前尺寸
     updateItemsSize() {
-      let nodes = this.$refs.items
+      const nodes = this.$refs.items
       nodes.forEach(node => {
-        let rect = node.getBoundingClientRect()
-        let height = rect.height
-        let index = +node.id.slice(1)
-        let oldHeight = this.positions[index].height
-        let dValue = oldHeight - height
-        //存在差值
+        const rect = node.getBoundingClientRect()
+        const height = rect.height
+        const index = +node.id.slice(1)
+        const oldHeight = this.positions[index].height
+        const dValue = oldHeight - height
+        // 存在差值
         if (dValue) {
           this.positions[index].bottom = this.positions[index].bottom - dValue
           this.positions[index].height = height
@@ -160,11 +160,11 @@ export default {
         }
       })
     },
-    //获取当前的偏移量
+    // 获取当前的偏移量
     setStartOffset() {
       let startOffset
       if (this.start >= 1) {
-        let size =
+        const size =
           this.positions[this.start].top -
           (this.positions[this.start - this.aboveCount]
             ? this.positions[this.start - this.aboveCount].top
@@ -175,16 +175,16 @@ export default {
       }
       this.$refs.content.style.transform = `translate3d(0,${startOffset}px,0)`
     },
-    //滚动事件
+    // 滚动事件
     scrollEvent() {
-      //当前滚动位置
-      let scrollTop = this.$refs.list.scrollTop
+      // 当前滚动位置
+      const scrollTop = this.$refs.list.scrollTop
       // let startBottom = this.positions[this.start - ]
-      //此时的开始索引
+      // 此时的开始索引
       this.start = this.getStartIndex(scrollTop)
-      //此时的结束索引
+      // 此时的结束索引
       this.end = this.start + this.visibleCount
-      //此时的偏移量
+      // 此时的偏移量
       this.setStartOffset()
     }
   }
@@ -219,6 +219,7 @@ export default {
   color: #555;
   box-sizing: border-box;
   border: 1px solid #ebebeb;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
   /* height:200px; */
 }
 </style>

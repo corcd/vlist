@@ -1,6 +1,6 @@
 <template>
   <p>
-    <span style="color:red">{{ item.id + 1 }}</span
+    <span style="color:red">No.{{ item.id + 1 }}</span
     >{{ item.value + item.value }}
   </p>
 </template>
